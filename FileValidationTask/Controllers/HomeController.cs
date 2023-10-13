@@ -21,11 +21,16 @@ namespace FileValidationTask.Controllers
         [HttpPost]
         public IActionResult Index(FileModel file)
         {
+            if (ModelState.IsValid)
+            {
+                TempData["SuccessMessage"] = "File has been successfully uploaded!";
+            }
+
             return View();
         }
 
         public IActionResult Privacy()
-        {
+        {           
             return View();
         }
 
