@@ -12,7 +12,6 @@ namespace FileValidationTask.Utility
             _allowedExtensions = allowedExtensions;
             _maxSize = maxSize;
             _fileCount = fileCount;
-
         }
 
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
