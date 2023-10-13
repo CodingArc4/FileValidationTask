@@ -17,25 +17,33 @@ namespace FileValidationTask.Utility
 
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
-            var file = value as IFormFile;
-
-            if (file != null)
+            if (value is List<IFormFile> files)
             {
-                var extension = Path.GetExtension(file.FileName);
-                if (!_allowedExtensions.Contains(extension.ToLower()))
+                if(files.Count > _fileCount)
                 {
-                    return new ValidationResult($"File Extension is not supported");
+                    return new ValidationResult($"You can upload maximum {_fileCount} files.");
+                }
+
+                foreach (var file in files)
+                {
+                    if (file != null)
+                    {
+                        var extension = Path.GetExtension(file.FileName);
+                        if (!_allowedExtensions.Contains(extension.ToLower()))
+                        {
+                            return new ValidationResult($"File Extension is not supported");
+                        }
+                    }
+
+                    if (file != null)
+                    {
+                        if (file.Length > (1000000 * _maxSize))
+                        {
+                            return new ValidationResult($"The required size for file upload is {_maxSize} MB.");
+                        }
+                    }
                 }
             }
-
-            if (file != null)
-            {
-                if (file.Length > (1000000 * _maxSize))
-                {
-                    return new ValidationResult($"The required size for file upload is {_maxSize} MB.");
-                }
-            }
-
             return ValidationResult.Success;
         }
     }
